@@ -14,9 +14,10 @@ public class SNARTinterpreter {
 		adbLink.cmd("adb shell input tap " + x +  " " + y);
 	}
 	
+	int offset = 300;
 	public void sendSwipe(int xStart, int yStart, int xStop, int yStop) throws IOException, InterruptedException{
-		System.out.println("adb shell input swipe " + xStart +  " " + yStart + " " + xStop + " " + yStop);
-		adbLink.cmd("adb shell input swipe " + xStart +  " " + yStart + " " + xStop + " " + yStop);
+		System.out.println("adb shell input swipe " + xStart +  " " + yStart + " " + xStop + " " + yStop + " 0");
+		adbLink.cmd("adb shell input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + " 0");
 	}
 	
 	public void byFile(){

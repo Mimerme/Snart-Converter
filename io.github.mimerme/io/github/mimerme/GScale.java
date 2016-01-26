@@ -17,8 +17,9 @@ import org.bytedeco.javacv.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 
 public class GScale extends Converter {
-	int lastNumber = 2;
-	int recordPoints = 0;
+	int lastBit = 2;
+	int bitCount = 0;
+	boolean startBitCount = false;
 	SNARTinterpreter interpreter = new SNARTinterpreter();
 	@Override
 	public String[] convert(IplImage image) {
@@ -56,10 +57,6 @@ public class GScale extends Converter {
 
         // Show image on window.
         canvas.showImage(converter.convert(result));
-		
-        //Last time the in-between x values were converted into a swipe event
-        int lastDump = 0;
-        //Set to 0 because it was never done before
         
 		//Count white and black
 		for(int y = 0; y < result.height(); y++){
@@ -68,44 +65,30 @@ public class GScale extends Converter {
 
 		        CvScalar ptr = cvGet2D(result, y, x);
 
-		        //If pixel is just white
-		        if(ptr.val(2) == 255 && ptr.val(1) == 255 && ptr.val(0) == 255){
-			        bin[x] = 0;
-		        	if(lastNumber == 1){
-			        	try {
-			        		//Send touch with offset of 500 pixels
-							interpreter.sendSwipe(lastDump + recordPoints + 500, y + 500,x + 500, y + 500);
-							lastDump = x;
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-		        	}
-		        	lastNumber = 0;
-
-		        }
-		        else if(ptr.val(2) == 0 && ptr.val(1) == 0 && ptr.val(0) == 0){
+		        //If pixel is black
+		        if(ptr.val(2) == 0 && ptr.val(1) == 0 && ptr.val(0) == 0){
 		        	bin[x] = 1;
-		        	if(lastNumber == 0){
-		        		recordPoints = x;
+		        	//If last pixel was white
+		        	if(lastBit == 0 || lastBit == 2){
+		        		//Start coutning bits and reset the counter
+		        		bitCount = 0;
+		        		startBitCount = true;
 		        	}
-		        	else{
-		        		recordPoints++;
-		        	}
-		        	lastNumber = 1;
+		        	if(startBitCount)
+		        		bitCount++;
+		        	lastBit = 1;
 
 		        }
 		        //If pixel is opaque catch the possible conditional
 		        else{
 			        bin[x] = 0;
-		        	if(lastNumber == 1){
-			        	try {
-			        		//Send touch with offset of 500 pixels
-							interpreter.sendSwipe(recordPoints + 500, y + 500,x + 500, y + 500);
-							lastDump = x;
+			        //If last pixel was black
+			        if(lastBit == 1){
+			        	//Stop the bitcount and reset the bitcounter
+		        		startBitCount = false;
+		        		//You want to draw so send a swipe
+		        		try {
+							interpreter.sendSwipe(x - bitCount, y, x, y);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -113,9 +96,20 @@ public class GScale extends Converter {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-		        	}
-		        	lastNumber = 0;
+			        }
+			        lastBit = 0;
 		        }
+			}
+			if(startBitCount && lastBit > 0){
+				try {
+					interpreter.sendSwipe(result.width() - 1 - bitCount, y, result.width() - 1, y);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if(y == result.height() - 1){
 				snartBuffer.add(y + ": " + arrayToString(bin) + "\n");
@@ -123,17 +117,6 @@ public class GScale extends Converter {
 			else{
 				snartBuffer.add(y + ": " + arrayToString(bin) + "," + "\n");
 			}
-        	try {
-        		//Send touch with offset of 500 pixels
-				interpreter.sendSwipe(lastDump + 500, y + 500,result.width() - 1 + 500, y + 500);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        	lastDump = 0;
 		}
 		snartBuffer.add("}");
 
