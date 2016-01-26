@@ -1,5 +1,5 @@
 # Snart-Converter
-Image converter for Snart. Translates an image into touches that the Snart-Interpreter can read
+Image converter for Snart. Translates an image a JSON style file touches that the Snart-Interpreter can read
 
 #.SNART format
 Below is the .SNART file format in plain text for each version
