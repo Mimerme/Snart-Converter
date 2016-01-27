@@ -2,7 +2,7 @@
 Image converter for Snart. Translates an image a JSON style file touches that the Snart-Interpreter can read.
 
 #About
-Originally designed for Snapchat, the Snart-Converter was supposed to draw a picture from an inputed image to create a Snapsterpiece. I plan to utilize the Snart Converter in other proejcts as well. Perhaps repackage the algoirthms and develop a consumer/user friendly version of the Snart-Converter for anyone to draw images onto Snapchat. Later on probably implement another style of "automated drawing" in games such as Dota 2, just for fun.
+Originally designed for Snapchat, the Snart-Converter draws a picture from an inputed image to create a Snapsterpiece. I plan to utilize the Snart Converter in other proejcts as well. Perhaps repackage the algoirthms and develop a consumer/user friendly version of the Snart-Converter for anyone to draw images onto Snapchat. Later on probably implement another style of "automated drawing" in games such as Dota 2, just for fun.
 
 #Running
 - Download/ clone the repository
@@ -28,7 +28,7 @@ VERSION=GSCALE
 ```
 
 ##GScale Android
-File extension .SNAP. List of commands to run in the ADB Shell. Runs in the Android Debug Bridge with the following command. This runs a series of swipes on your android device. Perfect for drawing images in Snapchat.
+File extension .SNAP. List of commands to run in the ADB Shell. This runs a series of swipes on your android device. Perfect for drawing images in Snapchat. Runs in the Android Debug Bridge with the following command.
 ```
 adb shell < [filename].SNAP
 ```
@@ -45,6 +45,23 @@ input swipe [xStart] [yStart] [xEnd] [yEnd]
 etc...
 ```
 
+##GScale Edge
+File extension .SNAP. List of commands to run in the ADB Shell. This runs a series of swipes on your android device. Perfect for drawing images in Snapchat. Similar to GScale Android, however uses an edge detection algorithm instead. Runs in the Android Debug Bridge with the following command.
+```
+adb shell < [filename].SNAP
+```
+
+Raw text format is as follows.
+
+```
+input swipe [xStart] [yStart] [xEnd] [yEnd]
+input swipe [xStart] [yStart] [xEnd] [yEnd]
+input swipe [xStart] [yStart] [xEnd] [yEnd]
+input swipe [xStart] [yStart] [xEnd] [yEnd]
+input swipe [xStart] [yStart] [xEnd] [yEnd]
+input swipe [xStart] [yStart] [xEnd] [yEnd]
+etc...
+```
 
 ##RGB
 _Decapricated. No need for file type_
