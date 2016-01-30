@@ -2,6 +2,7 @@ package io.github.mimerme;
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvSaveImage;
+import io.github.mimerme.interpreter.SNARTinterpreter;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -15,12 +16,14 @@ import org.bytedeco.javacpp.opencv_core.IplImage;
 public class App 
 {
 	static int SNARToutputversion;
-	
+	public static SNARTinterpreter interpreter = new SNARTinterpreter();
+
 	public static String imageLocation;
 	public static String outputLocation;
     static Converter converter;
 	public static SNARTWritter writter = new SNARTWritter();
-    
+    public static boolean createFile = true;
+	
     public static void main( String[] args ) throws IOException
     {
 
@@ -30,9 +33,12 @@ public class App
         Scanner input = new Scanner(System.in);
         System.out.println( "Enter image location" );
         imageLocation = input.nextLine();
-        System.out.println( "Enter .SNART instruction output location" );
+        System.out.println( "Enter the file output location. Default (No File)" );
         outputLocation = input.nextLine();
-        System.out.println("Enter .SNART conversion version (GScale=1) (RGB=2) (Pixelate=3)");
+        if(outputLocation.equals("") || outputLocation == null){
+        	createFile = false;
+        }
+        System.out.println("Enter .SNART conversion version (GScale=1) (GScale Android=2)(Pixelate=3) (GScale Edge=4) (Thinning Test=5)");
         SNARToutputversion = input.nextInt();
         
         switch(SNARToutputversion){
@@ -40,9 +46,16 @@ public class App
         	converter = new GScale();
         	break;
         case 2:
+        	converter = new GScaleAndroid();
         	break;
         case 3:
         	converter = new Pixelate();
+        	break;
+        case 4:
+        	converter = new GScaleEdge();
+        	break;
+        case 5:
+        	converter = new Thinning();
         	break;
         default:
         	System.out.println("Invalid option...");
@@ -64,10 +77,11 @@ public class App
             System.out.println("Saving resulting image...");
         	writter.writeImage(outputLocation, converter.getResultingImage());
         }
-        else{
-            System.out.println("Saving .SNART...");
+        else if(createFile == true){
+            System.out.println("Saving file...");
             writter.writeTo(outputLocation, converter.snartBuffer);
         }
+
         System.out.println("Wow! The converter ran succesfully without error!");
 
 

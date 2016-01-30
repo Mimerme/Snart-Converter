@@ -8,6 +8,7 @@ import io.github.mimerme.interpreter.SNARTinterpreter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.bytedeco.javacpp.opencv_core.CvScalar;
 import org.bytedeco.javacpp.opencv_core.IplImage;
@@ -16,14 +17,24 @@ import org.bytedeco.javacv.*;
 
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 
-public class GScale extends Converter {
-
+public class GScaleAndroid extends Converter {
+	int lastBit = 2;
+	int bitCount = 0;
+	int offset = 200;
+	boolean startBitCount = false;
 	@Override
 	public String[] convert(IplImage image) {
+		try {
+			App.interpreter.connect();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-		version = "GSCALE";
-		snartBuffer.add("VERSION=" + version);
-		snartBuffer.add("{");
+		version = "GSCALEAndroid";
 
 		
 		// TODO Auto-generated method stub
@@ -56,35 +67,45 @@ public class GScale extends Converter {
 		        //If pixel is black
 		        if(ptr.val(2) == 0 && ptr.val(1) == 0 && ptr.val(0) == 0){
 		        	bin[x] = 1;
+		        	//If last pixel was white
+		        	if(lastBit == 0 || lastBit == 2){
+		        		//Start coutning bits and reset the counter
+		        		bitCount = 0;
+		        		startBitCount = true;
+		        	}
+		        	if(startBitCount)
+		        		bitCount++;
+		        	lastBit = 1;
 
 		        }
 		        //If pixel is opaque catch the possible conditional
 		        else{
 			        bin[x] = 0;
+			        //If last pixel was black
+			        if(lastBit == 1){
+			        	//Stop the bitcount and reset the bitcounter
+		        		startBitCount = false;
+		        		//You want to draw so send a swipe
+		        			int xStart = x-bitCount;
+		        			int yStart = y;
+		        			int xStop = x;
+		        			int yStop = y;
+		        			snartBuffer.add("input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
+			        }
+			        lastBit = 0;
 		        }
 			}
-			if(y == result.height() - 1){
-				snartBuffer.add(y + ": " + arrayToString(bin) + "\n");
-			}
-			else{
-				snartBuffer.add(y + ": " + arrayToString(bin) + "," + "\n");
+			if(startBitCount && lastBit > 0){
+        			int xStart = result.width() - 1 - bitCount;
+        			int yStart = y;
+        			int xStop = result.width() - 1;
+        			int yStop = y;
+        			snartBuffer.add("input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
 			}
 		}
-		snartBuffer.add("}");
-
-		
-
 		
 		return null;
 	}
 	
-	private String arrayToString(int[] arr){
-		String buf = "[";
-		for (int val : arr) {
-			buf = buf + val + ",";
-		}
-		buf = buf.substring(0, buf.length() - 1);
-		return buf + "]";
-	}
 
 }
