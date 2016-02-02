@@ -90,7 +90,7 @@ public class GScaleAndroid extends Converter {
 		        			int yStart = y;
 		        			int xStop = x;
 		        			int yStop = y;
-		        			snartBuffer.add("input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
+		        			snartBuffer.add("adb shell input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
 			        }
 			        lastBit = 0;
 		        }
@@ -100,7 +100,7 @@ public class GScaleAndroid extends Converter {
         			int yStart = y;
         			int xStop = result.width() - 1;
         			int yStop = y;
-        			snartBuffer.add("input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
+        			snartBuffer.add("adb shell input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
 			}
 		}
 		

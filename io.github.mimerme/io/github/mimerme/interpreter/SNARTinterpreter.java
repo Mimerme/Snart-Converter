@@ -24,7 +24,7 @@ public class SNARTinterpreter {
 	
 	public void runFile(){
 		try {
-			adbLink.cmd("adb shell < " + App.outputLocation);
+			adbLink.cmd(App.outputLocation);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
