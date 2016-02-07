@@ -20,7 +20,6 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class GScaleAndroid extends Converter {
 	int lastBit = 2;
 	int bitCount = 0;
-	int offset = 200;
 	boolean startBitCount = false;
 	@Override
 	public String[] convert(IplImage image) {
@@ -51,7 +50,7 @@ public class GScaleAndroid extends Converter {
         final CanvasFrame canvas = new CanvasFrame("My Image", 1);
         
         // Request closing of the application when the image window is closed.
-        canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        canvas.setDefaultCloseOperation(javax.swing.JFrame.HIDE_ON_CLOSE);
         final OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
 
         // Show image on window.
@@ -90,7 +89,7 @@ public class GScaleAndroid extends Converter {
 		        			int yStart = y;
 		        			int xStop = x;
 		        			int yStop = y;
-		        			snartBuffer.add("adb shell input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
+		        			snartBuffer.add("adb shell input swipe " + (xStart + App.offset) +  " " + (yStart + App.offset)+ " " + (xStop + App.offset) + " " + (yStop + App.offset) + "\n");
 			        }
 			        lastBit = 0;
 		        }
@@ -100,7 +99,7 @@ public class GScaleAndroid extends Converter {
         			int yStart = y;
         			int xStop = result.width() - 1;
         			int yStop = y;
-        			snartBuffer.add("adb shell input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
+        			snartBuffer.add("adb shell input swipe " + (xStart + App.offset) +  " " + (yStart + App.offset)+ " " + (xStop + App.offset) + " " + (yStop + App.offset) + "\n");
 			}
 		}
 		

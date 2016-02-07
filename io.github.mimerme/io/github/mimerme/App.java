@@ -23,7 +23,8 @@ public class App
     static Converter converter;
 	public static SNARTWritter writter = new SNARTWritter();
     public static boolean createFile = true;
-	
+	public static int offset = 350;
+    
     public static void main( String[] args ) throws IOException
     {
 
@@ -72,7 +73,8 @@ public class App
         }
         
         converter.convert(image);
-                
+               
+        
         if(SNARToutputversion == 3){
             System.out.println("Saving resulting image...");
         	writter.writeImage(outputLocation, converter.getResultingImage());

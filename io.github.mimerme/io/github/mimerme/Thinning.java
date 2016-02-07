@@ -39,8 +39,9 @@ import static org.bytedeco.javacpp.opencv_imgcodecs.cvSaveImage;
 public class Thinning extends Converter{
 	int lastBit = 2;
 	int bitCount = 0;
-	int offset = 200;
 	boolean startBitCount = false;
+	
+	public static int iterations = 5;
 	
 	static IplImage src;
 	ByteBuffer buffer;
@@ -64,7 +65,7 @@ public class Thinning extends Converter{
 		final CanvasFrame canvas = new CanvasFrame("Tmp", 1);
 
 		// Request closing of the application when the image window is closed.
-		canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+		canvas.setDefaultCloseOperation(javax.swing.JFrame.HIDE_ON_CLOSE);
 		final OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
 
 		canvas.showImage(converter.convert(src));
@@ -75,7 +76,9 @@ public class Thinning extends Converter{
 		
 /*		cvSaveImage("binary1.jpg", src);
 */		
-		for(int ll = 0; ll < 5; ll ++){
+		System.out.println("Running " + iterations + " iterations");
+		
+		for(int ll = 0; ll < iterations; ll ++){
 			getStep1();
 			getStep2();
 		}
@@ -99,8 +102,6 @@ public class Thinning extends Converter{
 		indxer.putDouble(new int[]{14,342,3}, 255);*/
 		
 		final CanvasFrame canvas1 = new CanvasFrame("Thinned", 1);
-
-		cvSaveImage("binary_thin3.jpg", src);
 		
 		// Request closing of the application when the image window is closed.
 		canvas1.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
@@ -141,7 +142,7 @@ public class Thinning extends Converter{
 		        			int yStart = y;
 		        			int xStop = x;
 		        			int yStop = y;
-		        			snartBuffer.add("adb shell input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
+		        			snartBuffer.add("adb shell input swipe " + (xStart + App.offset) +  " " + (yStart + App.offset)+ " " + (xStop + App.offset) + " " + (yStop + App.offset) + "\n");
 			        }
 			        lastBit = 0;
 		        }
@@ -151,7 +152,7 @@ public class Thinning extends Converter{
         			int yStart = y;
         			int xStop = result.width() - 1;
         			int yStop = y;
-        			snartBuffer.add("adb shell input swipe " + (xStart + offset) +  " " + (yStart + offset)+ " " + (xStop + offset) + " " + (yStop + offset) + "\n");
+        			snartBuffer.add("adb shell input swipe " + (xStart + App.offset) +  " " + (yStart + App.offset)+ " " + (xStop + App.offset) + " " + (yStop + App.offset) + "\n");
 			}
 		}
 
