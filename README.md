@@ -3,11 +3,14 @@
 #About
 Originally designed for Snapchat, the Snart-Converter draws a picture from an inputed image to create a Snapsterpiece. I plan to utilize the Snart Converter in other proejcts as well. Perhaps repackage the algoirthms and develop a consumer/user friendly version of the Snart-Converter for anyone to draw images onto Snapchat. Later on probably implement another style of "automated drawing" in games such as Dota 2, just for fun.
 
-#Running
+#Modifying and Running
 - Download/ clone the repository
 - Open the eclipse project / Run the release.bat if there is one
 - make sure adb runs on your computer. There is an adb.exe with the .dlls for Windows users. Mac users can install adb directly from the Android SDK Tools
 - Answer the questions the program prompts for
+
+##Running
+- download the relases from the /release folder (Run the GUI for a UI or any other jar for a command line prompt)
 
 #Script format
 
