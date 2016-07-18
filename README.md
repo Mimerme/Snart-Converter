@@ -1,5 +1,4 @@
 # Snart-Converter
-Image converter for Snart. Translates an image a JSON style file touches that the Snart-Interpreter can read.
 
 #About
 Originally designed for Snapchat, the Snart-Converter draws a picture from an inputed image to create a Snapsterpiece. I plan to utilize the Snart Converter in other proejcts as well. Perhaps repackage the algoirthms and develop a consumer/user friendly version of the Snart-Converter for anyone to draw images onto Snapchat. Later on probably implement another style of "automated drawing" in games such as Dota 2, just for fun.
